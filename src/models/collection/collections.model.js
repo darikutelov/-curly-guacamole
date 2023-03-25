@@ -1,0 +1,54 @@
+const collections = require("./collections.mongo");
+
+async function getAllCollections() {
+  return await collections
+    .find({}, { __v: 0 })
+    .populate("category")
+    .sort({ totalVolume: -1 });
+}
+
+//TODO: Category Id Validation
+async function saveCollection(collection) {
+  try {
+    let {
+      name,
+      description,
+      imageUrl,
+      contractAddress,
+      numberOfItems,
+      createdAt,
+      category,
+      totalVolume,
+      floorPrice,
+      owners,
+    } = collection;
+
+    const { upsertedCount, modifiedCount } = await collections.updateOne(
+      { name },
+      {
+        description,
+        imageUrl,
+        contractAddress,
+        numberOfItems,
+        createdAt,
+        category,
+        totalVolume,
+        floorPrice,
+        owners,
+      },
+      {
+        upsert: true,
+      }
+    );
+    return {
+      success: !!(upsertedCount || modifiedCount),
+    };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports = {
+  getAllCollections,
+  saveCollection,
+};
