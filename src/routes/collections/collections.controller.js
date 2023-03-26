@@ -6,7 +6,6 @@ const {
 async function httpGetAllCollections(req, res) {
   const collections = await getAllCollections();
   const collectionsNoMongoID = collections.map((collection) => {
-    console.log(collection);
     return {
       id: collection.id,
       name: collection.name,
