@@ -4,16 +4,7 @@ const {
 } = require("../../models/categories/categories.model");
 
 async function httpGetAllCategories(req, res) {
-  const categories = await getAllCategories();
-  const categoriesNoMongoID = categories.map((category) => {
-    return {
-      id: category.id,
-      name: category.name,
-      imageUrl: category.imageUrl,
-    };
-  });
-
-  return res.status(200).json(categoriesNoMongoID);
+  return res.status(200).json(await getAllCategories());
 }
 
 async function httpSaveCategory(req, res) {

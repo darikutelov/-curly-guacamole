@@ -4,24 +4,7 @@ const {
 } = require("../../models/collection/collections.model");
 
 async function httpGetAllCollections(req, res) {
-  const collections = await getAllCollections();
-  const collectionsNoMongoID = collections.map((collection) => {
-    return {
-      id: collection.id,
-      name: collection.name,
-      imageUrl: collection.imageUrl,
-      description: collection.description,
-      contractAddress: collection.contractAddress,
-      numberOfItems: collection.numberOfItems,
-      createdAt: collection.createdAt,
-      category: collection.category.name,
-      totalVolume: collection.totalVolume,
-      floorPrice: collection.floorPrice,
-      owners: collection.owners,
-    };
-  });
-
-  return res.status(200).json(collectionsNoMongoID);
+  return res.status(200).json(await getAllCollections());
 }
 
 async function httpSaveCollection(req, res) {
