@@ -23,11 +23,6 @@ const collectionSchema = new Schema(
     createdAt: {
       type: Date,
       required: true,
-      default: Date.now,
-    },
-    category: {
-      type: Schema.Types.ObjectId,
-      ref: "Categories",
     },
     totalVolume: {
       type: Number,

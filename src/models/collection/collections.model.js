@@ -1,13 +1,9 @@
 const collections = require("./collections.mongo");
 
 async function getAllCollections() {
-  return await collections
-    .find({}, { __v: 0 })
-    .populate("category")
-    .sort({ totalVolume: -1 });
+  return await collections.find({}, { __v: 0 }).sort({ totalVolume: -1 });
 }
 
-//TODO: Category Id Validation
 async function saveCollection(collection) {
   try {
     let {
@@ -17,7 +13,6 @@ async function saveCollection(collection) {
       contractAddress,
       numberOfItems,
       createdAt,
-      category,
       totalVolume,
       floorPrice,
       owners,
@@ -31,7 +26,6 @@ async function saveCollection(collection) {
         contractAddress,
         numberOfItems,
         createdAt,
-        category,
         totalVolume,
         floorPrice,
         owners,
