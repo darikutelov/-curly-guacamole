@@ -12,6 +12,18 @@ async function savePrice(cryptoCurrency, priceInCryptoCurrency) {
   }
 }
 
+async function findExistingPriceId(cryptoCurrency, priceInCryptoCurrency) {
+  const foundPrices = await prices.find({
+    cryptoCurrency,
+    priceInCryptoCurrency,
+  });
+
+  if (foundPrices.length > 0) {
+    return foundPrices[0]._id;
+  }
+}
+
 module.exports = {
   savePrice,
+  findExistingPriceId,
 };

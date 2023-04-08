@@ -1,37 +1,35 @@
-const { saveItem, getAllItems } = require("../../models/items/items.model");
+const {
+  saveItem,
+  getAllItems,
+  updateItem,
+} = require("../../models/items/items.model");
 
 async function httpGetAllNftItems(req, res) {
   const items = await getAllItems();
-  // const formatedItems = items.map((item) => {
-  //   return {
-  //     id: item.id,
-  //     tokenName: item.tokenName,
-  //     description: item.description,
-  //     imageUrl: item.imageUrl,
-  //     likes: item.likes,
-  //     creator: item.creator,
-  //     category: item.category.name,
-  //     nftCollection: item.nftCollection.name,
-  //     contractAddress: item.contractAddress,
-  //     price: {
-  //       cryptoCurrency: item.price.cryptoCurrency,
-  //       priceInCryptoCurrency: item.price.priceInCryptoCurrency,
-  //     },
-  //     quantity: item.quantity,
-  //     auctionExpiryDate: item.auctionExpiryDate,
-  //     bids: item.bids,
-  //   };
-  // });
-
-  return res.status(200).json(await getAllItems());
+  return res.status(200).json({ nftItems: items });
 }
 
 async function httpSaveNftItem(req, res) {
-  const { nftItem } = req.body;
   return res.status(200).json(await saveItem(nftItem));
+}
+
+async function httpUpdateNftItem(req, res) {
+  const { itemId } = req.params;
+  const item = req.body;
+  console.log("😀");
+  console.log(item);
+  console.log(itemId);
+
+  try {
+    await updateItem(itemId, item);
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(400);
+  }
 }
 
 module.exports = {
   httpSaveNftItem,
   httpGetAllNftItems,
+  httpUpdateNftItem,
 };
