@@ -4,7 +4,8 @@ const {
 } = require("../../models/collection/collections.model");
 
 async function httpGetAllCollections(req, res) {
-  return res.status(200).json(await getAllCollections());
+  let collections = await getAllCollections();
+  return res.status(200).json({ nftCollections: collections });
 }
 
 async function httpSaveCollection(req, res) {
