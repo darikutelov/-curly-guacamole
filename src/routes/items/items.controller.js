@@ -10,6 +10,7 @@ async function httpGetAllNftItems(req, res) {
 }
 
 async function httpSaveNftItem(req, res) {
+  const { nftItem } = req.body;
   return res.status(200).json(await saveItem(nftItem));
 }
 

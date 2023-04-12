@@ -2,6 +2,8 @@ const express = require("express");
 
 const itemRouter = express.Router();
 
+const auth = require("../../middleware/auth");
+
 const {
   httpSaveNftItem,
   httpGetAllNftItems,
@@ -9,7 +11,7 @@ const {
 } = require("./items.controller");
 
 itemRouter.get("/", httpGetAllNftItems);
-itemRouter.post("/", httpSaveNftItem);
+itemRouter.post("/", auth, httpSaveNftItem);
 itemRouter.post("/:itemId", httpUpdateNftItem);
 
 module.exports = itemRouter;
