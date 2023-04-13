@@ -1,17 +1,23 @@
 const User = require("./user.mongo");
 
 async function createUser(userData) {
-  const { uid, email, password } = userData;
+  const { uid, email, password, username } = userData;
   return await User.create({
     email: email.toLowerCase(),
     password,
     uid,
+    username,
   });
 }
 
+//TODO: delete
 async function findUserByUidAndEmail(userData) {
   const { uid, email } = userData;
   return await User.findOne({ uid, email });
+}
+
+async function findUserByEmail(email) {
+  return await User.findOne({ email });
 }
 
 async function findProfileByUid(uid) {
@@ -41,6 +47,7 @@ async function findProfileById(id) {
 }
 
 module.exports = {
+  findUserByEmail,
   createUser,
   findProfileById,
   findProfileByUid,

@@ -6,17 +6,19 @@ const {
   findProfileById,
   findProfileByUid,
   findUserByUidAndEmail,
+  findUserByEmail,
 } = require("../../models/user/user.model");
 
 async function httpRegisterUser(req, res) {
+  console.log("🎯");
   try {
-    const { email, password, uid } = req.body;
+    const { email, password, username } = req.body;
 
-    if (!(email && password && uid)) {
+    if (!(email && password)) {
       return res.status(400).send("All input is required");
     }
 
-    const existingUser = await findUserByUidAndEmail({ email, uid });
+    const existingUser = await findUserByEmail(email);
 
     if (existingUser) {
       return res.status(409).send("User Already Exist. Please Login");
@@ -24,10 +26,14 @@ async function httpRegisterUser(req, res) {
 
     encryptedPassword = await bcrypt.hash(password, 10);
 
-    const user = await createUser({ uid, email, password: encryptedPassword });
+    const user = await createUser({
+      email,
+      password: encryptedPassword,
+      username,
+    });
 
     const token = jwt.sign(
-      { user_id: user._id, user_uid: user.uid, email },
+      { user_id: user._id, user_uid: email },
       process.env.JWT_TOKEN_KEY,
       {
         expiresIn: "48h",
@@ -55,14 +61,12 @@ async function httpRegisterUser(req, res) {
 async function httpLoginUser(req, res) {
   console.log("🎯");
   try {
-    const { email, uid, password } = req.body;
-
-    if (!(email && password && uid)) {
+    const { email, password } = req.body;
+    if (!(email && password)) {
       return res.status(400).send("All input is required");
     }
 
-    const user = await findUserByUidAndEmail({ email, uid });
-
+    const user = await findUserByEmail(email);
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
         { user_id: user._id, email },
