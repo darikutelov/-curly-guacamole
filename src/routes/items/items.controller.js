@@ -18,12 +18,9 @@ async function httpUpdateNftItem(req, res) {
   const { itemId } = req.params;
   const item = req.body;
   console.log("😀");
-  console.log(item);
-  console.log(itemId);
-
   try {
-    await updateItem(itemId, item);
-    res.sendStatus(200);
+    const updatedItem = await updateItem(itemId, item);
+    res.status(200).json(updatedItem);
   } catch (error) {
     res.sendStatus(400);
   }

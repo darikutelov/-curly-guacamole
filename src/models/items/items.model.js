@@ -80,29 +80,28 @@ async function updateItem(itemId, nftItem) {
       priceId = savedPrice._id;
     }
 
-    const { upsertedCount, modifiedCount } = await items.updateOne(
-      { _id: itemId },
-      {
-        tokenName,
-        description,
-        imageUrl,
-        creator,
-        category: category._id,
-        nftCollection: nftCollection._id,
-        contractAddress,
-        likes,
-        price: priceId,
-        quantity,
-        auctionExpiryDate,
-        bids,
-      },
-      {
-        upsert: true,
-      }
-    );
-    return {
-      success: !!(upsertedCount || modifiedCount),
-    };
+    const updatedItem = await items
+      .findByIdAndUpdate(
+        { _id: itemId },
+        {
+          tokenName,
+          description,
+          imageUrl,
+          creator,
+          category: category._id,
+          nftCollection: nftCollection._id,
+          contractAddress,
+          likes,
+          price: priceId,
+          quantity,
+          auctionExpiryDate,
+          bids,
+        }
+      )
+      .populate("category nftCollection price");
+
+    console.log(updatedItem);
+    return updatedItem;
   } catch (error) {
     console.log(error);
     throw new Error("Item not saved!");
