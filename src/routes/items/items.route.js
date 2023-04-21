@@ -8,10 +8,12 @@ const {
   httpSaveNftItem,
   httpGetAllNftItems,
   httpUpdateNftItem,
+  httpNftItemAddBid,
 } = require("./items.controller");
 
 itemRouter.get("/", httpGetAllNftItems);
 itemRouter.post("/", auth, httpSaveNftItem);
 itemRouter.post("/:itemId", auth, httpUpdateNftItem);
+itemRouter.post("/:itemId/bids", httpNftItemAddBid);
 
 module.exports = itemRouter;

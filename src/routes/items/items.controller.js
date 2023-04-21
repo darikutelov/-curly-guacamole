@@ -26,8 +26,15 @@ async function httpUpdateNftItem(req, res) {
   }
 }
 
+async function httpNftItemAddBid(res, req) {
+  const { itemId } = req.params;
+  const { bid } = req.body;
+  console.log("😀");
+}
+
 module.exports = {
   httpSaveNftItem,
   httpGetAllNftItems,
   httpUpdateNftItem,
+  httpNftItemAddBid,
 };

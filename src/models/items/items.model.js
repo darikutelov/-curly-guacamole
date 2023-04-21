@@ -99,8 +99,6 @@ async function updateItem(itemId, nftItem) {
         }
       )
       .populate("category nftCollection price");
-
-    console.log(updatedItem);
     return updatedItem;
   } catch (error) {
     console.log(error);
