@@ -14,6 +14,6 @@ const {
 itemRouter.get("/", httpGetAllNftItems);
 itemRouter.post("/", auth, httpSaveNftItem);
 itemRouter.post("/:itemId", auth, httpUpdateNftItem);
-itemRouter.post("/:itemId/bids", httpNftItemAddBid);
+itemRouter.post("/:itemId/bids", auth, httpNftItemAddBid);
 
 module.exports = itemRouter;
