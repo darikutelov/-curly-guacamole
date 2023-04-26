@@ -30,14 +30,12 @@ async function httpUpdateNftItem(req, res) {
 
 async function httpNftItemAddBid(req, res) {
   const { itemId } = req.params;
-  const { bid } = req.body;
+  const bid = req.body;
 
-  console.log("😀");
   try {
     const updatedItem = await addBid(req, itemId, bid);
     res.status(200).json(updatedItem);
   } catch (error) {
-    // TODO: - Handle error message
     console.log(error);
     res.status(400).send(error.message);
   }

@@ -4,7 +4,11 @@ const users = require("../../user/user.mongo");
 const { savePrice } = require("../price/price.model");
 
 async function addBid(req, itemId, bid) {
-  const { userId, cryptoCurrency, priceInCryptoCurrency } = bid;
+  const {
+    price: { cryptoCurrency, priceInCryptoCurrency },
+    user: { _id: userId },
+  } = bid;
+
   const user = await users.findById(userId);
 
   if (!user) {
@@ -21,7 +25,7 @@ async function addBid(req, itemId, bid) {
     throw new Error("Item does not exist!");
   }
 
-  const hasCurrentUserBid = item.bids.find((x) => x.user == bid.userId);
+  const hasCurrentUserBid = item.bids.find((x) => x.user == userId);
 
   if (hasCurrentUserBid) {
     throw new Error("You already have a bid for this item!");
@@ -41,7 +45,7 @@ async function addBid(req, itemId, bid) {
     );
 
     if (modifiedCount > 0) {
-      return await items.findById(item._id);
+      return bid.populate("price user");
     }
   } catch {
     throw new Error("Bid was not saved!");

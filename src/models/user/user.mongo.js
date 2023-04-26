@@ -17,6 +17,9 @@ const userSchema = new Schema({
     trim: true,
     required: true,
   },
+  avatarUrl: {
+    type: String,
+  },
   token: {
     type: String,
   },

@@ -5,7 +5,23 @@ async function getAllItems() {
   return await items
     .find({}, { __v: 0 })
     .sort({ collection: 1 })
+    .populate({
+      path: "bids",
+      populate: [
+        {
+          path: "user",
+          model: "User",
+          select: "username email avatarUrl",
+        },
+        {
+          path: "price",
+          model: "Prices",
+        },
+      ],
+    })
     .populate("category nftCollection price");
+  // .populate("category nftCollection price bids")
+  // .populate("bids.user bids.price");
 }
 
 async function saveItem(nftItem) {
@@ -98,7 +114,7 @@ async function updateItem(itemId, nftItem) {
           bids,
         }
       )
-      .populate("category nftCollection price");
+      .populate("category nftCollection price bids");
     return updatedItem;
   } catch (error) {
     console.log(error);
