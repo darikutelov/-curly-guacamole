@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const {
   saveItem,
   getAllItems,
@@ -41,9 +43,21 @@ async function httpNftItemAddBid(req, res) {
   }
 }
 
+async function httpSaveNftImage(req, res) {
+  console.log("Uploading file");
+  console.log(req.file);
+
+  const newPath = `src/uploads/${req.file.originalname}`;
+  fs.rename(req.file.path, newPath, () => {
+    //upload to cloudinary
+    res.json({ fileName: `${req.file.originalname}` });
+  });
+}
+
 module.exports = {
   httpSaveNftItem,
   httpGetAllNftItems,
   httpUpdateNftItem,
   httpNftItemAddBid,
+  httpSaveNftImage,
 };
