@@ -4,7 +4,7 @@ const { savePrice, findExistingPriceId } = require("./price/price.model");
 async function getAllItems() {
   return await items
     .find({}, { __v: 0 })
-    .sort({ collection: 1 })
+    .sort({ _id: -1 })
     .populate({
       path: "bids",
       populate: [
@@ -60,9 +60,12 @@ async function saveItem(nftItem) {
         upsert: true,
       }
     );
-    return {
-      success: !!(upsertedCount || modifiedCount),
-    };
+
+    const createdItem = await items
+      .findOne({ tokenName: tokenName })
+      .populate("category nftCollection price bids");
+
+    return createdItem;
   } catch (error) {
     console.log(error);
   }
