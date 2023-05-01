@@ -2,9 +2,6 @@ const { Schema, model } = require("mongoose");
 const { AutoIncrement } = require("../../services/mongo");
 
 const OrderSchema = new Schema({
-  orderNumber: {
-    type: Number,
-  },
   userId: {
     type: Schema.Types.ObjectId,
     ref: "user",
@@ -15,15 +12,9 @@ const OrderSchema = new Schema({
   },
   items: [
     {
-      itemId: {
+      item: {
         type: Schema.Types.ObjectId,
         ref: "items",
-      },
-      tokenName: {
-        type: String,
-      },
-      imageUrl: {
-        type: String,
       },
       price: {
         type: Schema.Types.ObjectId,
@@ -51,15 +42,4 @@ const OrderSchema = new Schema({
   },
 });
 
-OrderSchema.pre("save", async function (next) {
-  var doc = this;
-  const currentNumberOfOrders = await Order.countDocuments();
-
-  console.log(currentNumberOfOrders);
-  this.orderNumber = currentNumberOfOrders + 1;
-
-  next();
-});
-
-const Order = model("Order", OrderSchema);
-module.exports = Order;
+module.exports = model("Order", OrderSchema);
