@@ -1,11 +1,5 @@
 const fs = require("fs");
-var cloudinary = require("cloudinary").v2;
-cloudinary.config({
-  cloud_name: "dariku",
-  secure: true,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET_KEY,
-});
+const cloudinary = require("../../services/cloudinarySetup");
 
 const {
   saveItem,

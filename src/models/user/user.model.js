@@ -46,10 +46,33 @@ async function findProfileById(id) {
   }
 }
 
+async function updateUser(user) {
+  try {
+    const { upsertedCount, modifiedCount } = await User.updateOne(
+      { _id: user._id },
+      {
+        avatarUrl: user.avatarUrl,
+      },
+      {
+        upsert: true,
+      }
+    );
+
+    const updatedUser = await User.findOne({ _id: user._id });
+    updatedUser.password = undefined;
+    console.log(updatedUser);
+    return updatedUser;
+  } catch (error) {
+    console.log(error);
+    throw new Error("User not updated!");
+  }
+}
+
 module.exports = {
   findUserByEmail,
   createUser,
   findProfileById,
   findProfileByUid,
   findUserByUidAndEmail,
+  updateUser,
 };

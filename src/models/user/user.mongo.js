@@ -27,6 +27,9 @@ const userSchema = new Schema({
     type: String,
     trim: true,
   },
+  wallet: {
+    type: String,
+  },
   walletAddress: {
     type: String,
     trim: true,

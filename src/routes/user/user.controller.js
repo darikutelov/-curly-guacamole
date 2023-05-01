@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const cloudinary = require("../../services/cloudinarySetup");
 
 const {
   createUser,
@@ -7,6 +9,7 @@ const {
   findProfileByUid,
   findUserByUidAndEmail,
   findUserByEmail,
+  updateUser,
 } = require("../../models/user/user.model");
 
 async function httpRegisterUser(req, res) {
@@ -107,8 +110,42 @@ async function httpGetProfile(req, res) {
   }
 }
 
+async function httpSaveUserAvatar(req, res) {
+  const newPath = `src/uploads/${req.file.originalname}`;
+
+  fs.rename(req.file.path, newPath, () => {
+    cloudinary.uploader.upload(
+      `${newPath}`,
+      { folder: "nftio/users" },
+      function (err, image) {
+        if (err) {
+          console.warn(err);
+          res.status(400).send("Error uploading file to cloud!");
+          return;
+        }
+        const filePath = image.secure_url.split("/");
+        const imageFileName = filePath[filePath.length - 1];
+        res.status(200).json({ fileName: imageFileName });
+      }
+    );
+  });
+}
+
+async function httpUpdateUser(req, res) {
+  console.log("Update user");
+  const user = req.body;
+  console.log(user);
+  try {
+    res.status(200).json(await updateUser(user));
+  } catch (error) {
+    res.sendStatus(400);
+  }
+}
+
 module.exports = {
   httpLoginUser,
   httpGetProfile,
   httpRegisterUser,
+  httpSaveUserAvatar,
+  httpUpdateUser,
 };
