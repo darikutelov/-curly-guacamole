@@ -51,7 +51,11 @@ async function updateUser(user) {
     const { upsertedCount, modifiedCount } = await User.updateOne(
       { _id: user._id },
       {
+        username: user.username,
+        email: user.email,
         avatarUrl: user.avatarUrl,
+        walletAddress: user.walletAddress,
+        wallet: user.wallet,
       },
       {
         upsert: true,
@@ -60,7 +64,6 @@ async function updateUser(user) {
 
     const updatedUser = await User.findOne({ _id: user._id });
     updatedUser.password = undefined;
-    console.log(updatedUser);
     return updatedUser;
   } catch (error) {
     console.log(error);

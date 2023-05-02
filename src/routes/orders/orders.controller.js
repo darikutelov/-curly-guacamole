@@ -6,7 +6,6 @@ const {
 async function httpAddUserOrder(req, res) {
   const userId = req.params.userId;
   const order = req.body;
-
   try {
     const createdOrder = await addUserOrder(userId, order);
     return res.status(200).json(createdOrder);
