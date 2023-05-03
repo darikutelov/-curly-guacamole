@@ -1,4 +1,5 @@
 const User = require("./user.mongo");
+const items = require("../items/items.mongo");
 
 async function createUser(userData) {
   const { uid, email, password, username } = userData;
@@ -35,14 +36,37 @@ async function findProfileByUid(uid) {
 
 async function findProfileById(id) {
   try {
-    const profile = await User.findById(id, { __v: 0 }).populate([
-      "deliveryAddress",
-      "invoiceAddress",
-    ]);
+    const profile = await User.findById(id, { __v: 0 }).populate("orders");
     return { profile };
   } catch (error) {
     console.log(error);
     return null;
+  }
+}
+
+async function getUserNftItems(userId) {
+  try {
+    const profile = await User.findById(userId, { __v: 0 }).populate("orders");
+
+    let orderItemsIds = profile.orders
+      .map((order) => {
+        return order.items.map((item) => {
+          return item._id;
+        });
+      })
+      .flat();
+
+    let itemsUrls = orderItemsIds.map(async (id) => {
+      const nft = await items.findById(id);
+      return {
+        id: id,
+        imageUrl: nft.imageUrl,
+      };
+    });
+
+    return await Promise.all(itemsUrls);
+  } catch (error) {
+    throw new Error(error);
   }
 }
 
@@ -78,4 +102,5 @@ module.exports = {
   findProfileByUid,
   findUserByUidAndEmail,
   updateUser,
+  getUserNftItems,
 };

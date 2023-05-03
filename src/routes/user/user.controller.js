@@ -10,6 +10,7 @@ const {
   findUserByUidAndEmail,
   findUserByEmail,
   updateUser,
+  getUserNftItems,
 } = require("../../models/user/user.model");
 
 async function httpRegisterUser(req, res) {
@@ -93,11 +94,7 @@ async function httpLoginUser(req, res) {
 
 async function httpGetProfile(req, res) {
   const id = req.query.id;
-  const uid = req.query.uid;
   let profile;
-  if (uid) {
-    profile = await findProfileByUid(uid);
-  }
 
   if (id) {
     profile = await findProfileById(id);
@@ -106,7 +103,7 @@ async function httpGetProfile(req, res) {
   if (profile) {
     return res.status(201).json(profile);
   } else {
-    return res.status(400).json({ error: "Няма такъв профил!" });
+    return res.status(400).json({ error: "No such profile!" });
   }
 }
 
@@ -142,10 +139,20 @@ async function httpUpdateUser(req, res) {
   }
 }
 
+async function httpUserNftItems(req, res) {
+  const { userId } = req.params;
+  try {
+    res.status(200).json(await getUserNftItems(userId));
+  } catch (error) {
+    res.sendStatus(400);
+  }
+}
+
 module.exports = {
   httpLoginUser,
   httpGetProfile,
   httpRegisterUser,
   httpSaveUserAvatar,
   httpUpdateUser,
+  httpUserNftItems,
 };

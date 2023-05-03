@@ -7,11 +7,13 @@ const {
   httpGetProfile,
   httpSaveUserAvatar,
   httpUpdateUser,
+  httpUserNftItems,
 } = require("./user.controller");
 
 const userRouter = express.Router();
 
 userRouter.get("/", httpGetProfile);
+userRouter.get("/:userId/nftItems", httpUserNftItems);
 userRouter.post("/register", httpRegisterUser);
 userRouter.post("/login", httpLoginUser);
 userRouter.post("/update", httpUpdateUser);
