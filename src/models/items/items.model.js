@@ -74,47 +74,34 @@ async function saveItem(nftItem) {
 async function updateItem(itemId, nftItem) {
   console.log("🎉");
   try {
-    let {
-      tokenName,
-      description,
-      imageUrl,
-      creator,
-      category,
-      nftCollection,
-      contractAddress,
-      likes,
-      price: { cryptoCurrency, priceInCryptoCurrency },
-      quantity,
-      auctionExpiryDate,
-      bids,
-    } = nftItem;
+    let { likes } = nftItem;
 
-    var priceId = await findExistingPriceId(
-      cryptoCurrency,
-      priceInCryptoCurrency
-    );
+    // var priceId = await findExistingPriceId(
+    //   cryptoCurrency,
+    //   priceInCryptoCurrency
+    // );
 
-    if (!priceId) {
-      const savedPrice = await savePrice(cryptoCurrency, priceInCryptoCurrency);
-      priceId = savedPrice._id;
-    }
+    // if (!priceId) {
+    //   const savedPrice = await savePrice(cryptoCurrency, priceInCryptoCurrency);
+    //   priceId = savedPrice._id;
+    // }
 
     const updatedItem = await items
       .findByIdAndUpdate(
         { _id: itemId },
         {
-          tokenName,
-          description,
-          imageUrl,
-          creator,
-          category: category._id,
-          nftCollection: nftCollection._id,
-          contractAddress,
+          // tokenName,
+          // description,
+          // imageUrl,
+          // creator,
+          // category: category._id,
+          // nftCollection: nftCollection._id,
+          // contractAddress,
           likes,
-          price: priceId,
-          quantity,
-          auctionExpiryDate,
-          bids,
+          // price: priceId,
+          // quantity,
+          // auctionExpiryDate,
+          // bids,
         }
       )
       .populate("category nftCollection price bids");
